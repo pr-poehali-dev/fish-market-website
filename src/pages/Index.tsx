@@ -144,6 +144,114 @@ const Index = () => {
           issuer: "Россельхознадзор"
         }
       ]
+    },
+    {
+      id: 4,
+      name: "Морская капуста вакамэ",
+      price: "1,850 ₽/кг",
+      description: "Свежая морская капуста, богатая йодом и минералами",
+      image: "/img/6d99cd2f-7da0-4365-8069-0bcc2a550fd2.jpg",
+      badge: "Суперфуд",
+      freshness: {
+        arrivalDate: "21.01.2024",
+        shelfLife: 10, // дней
+        temperature: "+4°C",
+        storageConditions: "В соленой воде, охлажденные"
+      },
+      origin: {
+        country: "Япония",
+        region: "Префектура Иватэ",
+        type: "Выращены на морских фермах",
+        producer: "Yamada Seaweed Co., Ltd",
+        catchDate: "18.01.2024",
+        method: "Устойчивое культивирование в чистых водах"
+      },
+      certificates: [
+        {
+          name: "JAS Organic сертификат",
+          number: "JAS-ORG-23456",
+          validUntil: "18.12.2024",
+          issuer: "Japan Agricultural Standards"
+        },
+        {
+          name: "Сертификат качества ТР ТС 021/2011",
+          number: "ТС RU Д-RU.МЛ15.В.78945",
+          validUntil: "15.10.2025",
+          issuer: "Росаккредитация"
+        }
+      ]
+    },
+    {
+      id: 5,
+      name: "Ламинария сушеная",
+      price: "2,400 ₽/кг",
+      description: "Премиальная сушеная ламинария с высоким содержанием йода",
+      image: "/img/c0fac590-0da2-4415-a89f-d828b1645e11.jpg",
+      badge: "Эко",
+      freshness: {
+        arrivalDate: "20.01.2024",
+        shelfLife: 730, // дней (2 года)
+        temperature: "+18°C",
+        storageConditions: "Сухое прохладное место"
+      },
+      origin: {
+        country: "Россия",
+        region: "Приморский край, залив Посьета",
+        type: "Дикорастущая в очищенных водах",
+        producer: "ООО 'Дальневосточные морепродукты'",
+        catchDate: "15.01.2024",
+        method: "Ручной сбор в экологически чистых районах"
+      },
+      certificates: [
+        {
+          name: "Экологический сертификат Лист Жизни",
+          number: "ЛЖ-2024-789",
+          validUntil: "31.03.2025",
+          issuer: "НП Лист Жизни"
+        },
+        {
+          name: "ГОСТ Р 57127-2016",
+          number: "RU.ПРМ.05.НМ23",
+          validUntil: "20.08.2025",
+          issuer: "Росстандарт"
+        }
+      ]
+    },
+    {
+      id: 6,
+      name: "Нори премиум",
+      price: "3,100 ₽/кг",
+      description: "Красные водоросли нори высшего качества для суши",
+      image: "/img/6d99cd2f-7da0-4365-8069-0bcc2a550fd2.jpg",
+      badge: "Премиум",
+      freshness: {
+        arrivalDate: "23.01.2024",
+        shelfLife: 365, // дней (1 год)
+        temperature: "+20°C",
+        storageConditions: "Сухое место, защищенное от света"
+      },
+      origin: {
+        country: "Китай",
+        region: "Провинция Фуцзянь",
+        type: "Культивированные на морских фермах",
+        producer: "Fujian Ocean Harvest Ltd",
+        catchDate: "20.01.2024",
+        method: "Органическое культивирование в открытом море"
+      },
+      certificates: [
+        {
+          name: "China Organic Product Certificate",
+          number: "COP-2024-1456",
+          validUntil: "20.01.2026",
+          issuer: "China Organic Food Certification Center"
+        },
+        {
+          name: "Декларация соответствия ТР ИМ 021/2011",
+          number: "ИМ RU Д-CN.PA01.В.65432",
+          validUntil: "30.06.2025",
+          issuer: "Импортный контроль"
+        }
+      ]
     }
   ];
 
@@ -178,7 +286,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Icon name="Fish" size={32} className="text-ocean-blue" />
-              <h1 className="text-2xl font-bold text-ocean-deep">АкваМаркет</h1>
+              <h1 className="text-2xl font-bold text-ocean-deep">Великий прилив</h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#catalog" className="text-ocean-deep hover:text-ocean-blue transition-colors">Каталог</a>
@@ -207,7 +315,7 @@ const Index = () => {
               <span className="block text-ocean-blue">прямо к вашему столу</span>
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Премиальные рыба и морепродукты с гарантией свежести. 
+              Премиальные рыба, морепродукты и морские водоросли с гарантией свежести. 
               Контроль температуры и сроков годности на каждом этапе доставки.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -230,7 +338,7 @@ const Index = () => {
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-ocean-deep mb-4">Популярные товары</h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Самые свежие и качественные морепродукты, отобранные нашими экспертами
+              Самые свежие морепродукты и морские водоросли, отобранные нашими экспертами
             </p>
           </div>
           
@@ -733,10 +841,10 @@ const Index = () => {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Icon name="Fish" size={28} className="text-ocean-blue" />
-                <h4 className="text-xl font-bold">АкваМаркет</h4>
+                <h4 className="text-xl font-bold">Великий прилив</h4>
               </div>
               <p className="text-gray-300">
-                Премиальные морепродукты с доставкой по всей России
+                Премиальные морепродукты и водоросли с доставкой по всей России
               </p>
             </div>
             
@@ -746,6 +854,7 @@ const Index = () => {
                 <li><a href="#" className="hover:text-ocean-blue transition-colors">Рыба</a></li>
                 <li><a href="#" className="hover:text-ocean-blue transition-colors">Креветки</a></li>
                 <li><a href="#" className="hover:text-ocean-blue transition-colors">Мидии</a></li>
+                <li><a href="#" className="hover:text-ocean-blue transition-colors">Водоросли</a></li>
                 <li><a href="#" className="hover:text-ocean-blue transition-colors">Икра</a></li>
               </ul>
             </div>
@@ -777,7 +886,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 АкваМаркет. Все права защищены.</p>
+            <p>&copy; 2024 Великий прилив. Все права защищены.</p>
           </div>
         </div>
       </footer>
