@@ -9,6 +9,27 @@ import { useState } from "react";
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  // Функция для расчета индикатора свежести
+  const getFreshnessIndicator = (arrivalDate, shelfLife) => {
+    const arrival = new Date(arrivalDate);
+    const now = new Date();
+    const expiry = new Date(arrival.getTime() + shelfLife * 24 * 60 * 60 * 1000);
+    
+    const totalDays = shelfLife;
+    const daysLeft = Math.ceil((expiry - now) / (24 * 60 * 60 * 1000));
+    const percentage = Math.max(0, (daysLeft / totalDays) * 100);
+    
+    if (percentage > 70) {
+      return { status: 'excellent', color: 'green', text: 'Отличная', percentage };
+    } else if (percentage > 40) {
+      return { status: 'good', color: 'yellow', text: 'Хорошая', percentage };
+    } else if (percentage > 15) {
+      return { status: 'fair', color: 'orange', text: 'Удовлетворительная', percentage };
+    } else {
+      return { status: 'poor', color: 'red', text: 'Скидка - срок истекает', percentage };
+    }
+  };
+
   const products = [
     {
       id: 1,
@@ -17,6 +38,12 @@ const Index = () => {
       description: "Свежий норвежский лосось высшего качества",
       image: "/img/f28332d0-69d8-4065-b19c-85d8eed14d74.jpg",
       badge: "Хит продаж",
+      freshness: {
+        arrivalDate: "20.01.2024",
+        shelfLife: 7, // дней
+        temperature: "-1°C",
+        storageConditions: "Охлажденный в льду"
+      },
       origin: {
         country: "Норвегия",
         region: "Фьорды Западной Норвегии",
@@ -53,6 +80,12 @@ const Index = () => {
       description: "Крупные тигровые креветки из Таиланда",
       image: "/img/36274f73-abb4-4e03-92a2-72b048d17f43.jpg",
       badge: "Новинка",
+      freshness: {
+        arrivalDate: "22.01.2024",
+        shelfLife: 5, // дней
+        temperature: "-2°C",
+        storageConditions: "Замороженные в шоковой заморозке"
+      },
       origin: {
         country: "Таиланд",
         region: "Провинция Сураттани",
@@ -83,6 +116,12 @@ const Index = () => {
       description: "Свежие мидии, выловленные у берегов Крыма",
       image: "/img/36274f73-abb4-4e03-92a2-72b048d17f43.jpg",
       badge: "Акция",
+      freshness: {
+        arrivalDate: "19.01.2024",
+        shelfLife: 3, // дней
+        temperature: "+2°C",
+        storageConditions: "Живые в морской воде"
+      },
       origin: {
         country: "Россия",
         region: "Республика Крым, Керченский пролив",
@@ -216,6 +255,31 @@ const Index = () => {
                   <CardDescription>{product.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
+                  {(() => {
+                    const freshness = getFreshnessIndicator(product.freshness.arrivalDate, product.freshness.shelfLife);
+                    return (
+                      <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <div className={`w-3 h-3 rounded-full bg-${freshness.color}-500 animate-pulse`}></div>
+                            <span className="text-sm font-medium text-gray-700">Свежесть: {freshness.text}</span>
+                          </div>
+                          <span className="text-xs text-gray-500">{Math.round(freshness.percentage)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`bg-${freshness.color}-500 h-2 rounded-full transition-all duration-300`} 
+                            style={{ width: `${freshness.percentage}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>Поступил: {product.freshness.arrivalDate}</span>
+                          <span>Температура: {product.freshness.temperature}</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                  
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Icon name="MapPin" size={14} className="text-ocean-blue" />
@@ -245,6 +309,56 @@ const Index = () => {
                         </DialogHeader>
                         
                         <div className="space-y-6">
+                          {/* Информация о свежести */}
+                          <div>
+                            <h4 className="font-semibold text-ocean-deep mb-3 flex items-center">
+                              <Icon name="Thermometer" size={20} className="mr-2 text-ocean-blue" />
+                              Контроль свежести
+                            </h4>
+                            <div className="bg-ocean-foam p-4 rounded-lg space-y-3">
+                              {(() => {
+                                const freshness = getFreshnessIndicator(product.freshness.arrivalDate, product.freshness.shelfLife);
+                                return (
+                                  <div className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center space-x-3">
+                                        <div className={`w-4 h-4 rounded-full bg-${freshness.color}-500 animate-pulse`}></div>
+                                        <span className="font-medium text-gray-700">Состояние: {freshness.text}</span>
+                                      </div>
+                                      <span className="text-sm text-gray-600">{Math.round(freshness.percentage)}% свежести</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                      <div 
+                                        className={`bg-${freshness.color}-500 h-3 rounded-full transition-all duration-300`} 
+                                        style={{ width: `${freshness.percentage}%` }}
+                                      ></div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                      <div>
+                                        <span className="font-medium text-gray-700">Дата поступления:</span>
+                                        <p className="text-gray-600">{product.freshness.arrivalDate}</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-700">Срок годности:</span>
+                                        <p className="text-gray-600">{product.freshness.shelfLife} дней</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-700">Температура хранения:</span>
+                                        <p className="text-gray-600">{product.freshness.temperature}</p>
+                                      </div>
+                                      <div>
+                                        <span className="font-medium text-gray-700">Условия хранения:</span>
+                                        <p className="text-gray-600">{product.freshness.storageConditions}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                          
+                          <Separator />
+                          
                           {/* Информация о происхождении */}
                           <div>
                             <h4 className="font-semibold text-ocean-deep mb-3 flex items-center">
@@ -334,6 +448,87 @@ const Index = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Система контроля свежести */}
+      <section className="py-16 bg-gradient-to-b from-ocean-foam to-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-ocean-deep mb-4">Инновационная система контроля свежести</h3>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Каждый продукт отслеживается с момента поступления до доставки с помощью передовых технологий мониторинга
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow border-l-4 border-green-500">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              </div>
+              <h4 className="text-lg font-semibold text-ocean-deep mb-2">Отличная свежесть</h4>
+              <p className="text-gray-600 text-sm">70-100% свежести. Только что поступившие продукты премиального качества</p>
+            </Card>
+            
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow border-l-4 border-yellow-500">
+              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+              </div>
+              <h4 className="text-lg font-semibold text-ocean-deep mb-2">Хорошая свежесть</h4>
+              <p className="text-gray-600 text-sm">40-70% свежести. Отличное качество с небольшим сроком хранения</p>
+            </Card>
+            
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow border-l-4 border-orange-500">
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
+              </div>
+              <h4 className="text-lg font-semibold text-ocean-deep mb-2">Удовлетворительная</h4>
+              <p className="text-gray-600 text-sm">15-40% свежести. Качество хорошее, рекомендуется быстрое употребление</p>
+            </Card>
+            
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow border-l-4 border-red-500">
+              <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              </div>
+              <h4 className="text-lg font-semibold text-ocean-deep mb-2">Акционная цена</h4>
+              <p className="text-gray-600 text-sm">До 15% свежести. Большие скидки, срок истекает в ближайшие дни</p>
+            </Card>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h4 className="text-2xl font-bold text-ocean-deep mb-4">Как работает наша система</h4>
+                <p className="text-gray-600">Полный цикл мониторинга качества от поставщика до вашего стола</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <div className="bg-ocean-blue/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icon name="Calendar" size={32} className="text-ocean-blue" />
+                  </div>
+                  <h5 className="font-semibold text-ocean-deep mb-2">Учет даты поступления</h5>
+                  <p className="text-gray-600 text-sm">Каждая партия маркируется точной датой и временем поступления на склад</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="bg-ocean-blue/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icon name="Thermometer" size={32} className="text-ocean-blue" />
+                  </div>
+                  <h5 className="font-semibold text-ocean-deep mb-2">Контроль температуры</h5>
+                  <p className="text-gray-600 text-sm">Непрерывный мониторинг температурного режима в специальных холодильных камерах</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="bg-ocean-blue/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icon name="Clock" size={32} className="text-ocean-blue" />
+                  </div>
+                  <h5 className="font-semibold text-ocean-deep mb-2">Расчет свежести</h5>
+                  <p className="text-gray-600 text-sm">Автоматический расчет процента свежести на основе срока годности и условий хранения</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
